@@ -184,3 +184,7 @@ For issues, questions, or suggestions:
 ---
 
 **Made with ❤️ for the Copilot Studio community**
+
+---
+
+> **⚠️ Disclaimer:** This project is my personal work. It contains no company code, confidential material, or proprietary information.
