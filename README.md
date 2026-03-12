@@ -1,5 +1,7 @@
 # Copilot Studio Advanced Analytics
 
+![Dashboards Value Infographic](CopilotStudio-KQL/Docs/Dashboards-Value-Infographic.png)
+
 A comprehensive collection of **production-ready KQL queries** and **Azure Data Explorer dashboards** for monitoring and analyzing **Microsoft Copilot Studio** agents through Azure Application Insights telemetry.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -148,6 +150,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Günter Schwarz**
 - GitHub: [@GuenterS](https://github.com/GuenterS)
+- Senior IT Architect
+
+## 🤖 Built with AI — Zero Code Written by Hand
+
+This entire repository — every KQL query, dashboard definition, documentation file, and project structure — was created using **[Claude Code](https://claude.ai/code)** with the **Claude Sonnet 4.5** model by Anthropic.
+
+The author is a **Senior IT Architect** with no software engineering background. Not a single line of code was written manually. The project demonstrates that deep domain expertise combined with AI-assisted development can produce production-ready analytics solutions without traditional programming skills.
+
+> _"I described what I needed as an IT architect, and Claude Code turned my requirements into working KQL queries, dashboards, and documentation."_
 
 ## 🙏 Acknowledgments
 
