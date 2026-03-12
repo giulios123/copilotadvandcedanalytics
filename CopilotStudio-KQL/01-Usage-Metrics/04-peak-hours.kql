@@ -1,0 +1,28 @@
+// ==============================================================================
+// Peak Usage Hours - Bot Activity by Hour of Day
+// ==============================================================================
+// Description: Identifies peak usage hours for capacity planning
+// Time Range: Last 14 days
+// Fields Used: name (BotMessageSend), user_Id, customDimensions (designMode)
+// ==============================================================================
+
+let queryStartDate = ago(14d);
+let queryEndDate = now();
+
+customEvents
+| where timestamp between (queryStartDate .. queryEndDate)  // Inclusive, avoids missing boundary events
+| where name == "BotMessageSend"
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| extend HourOfDay = hourofday(timestamp)
+| summarize
+    MessageCount = count(),
+    UniqueUsers = dcount(user_Id)
+    by HourOfDay
+| order by HourOfDay asc
+| render columnchart
+    with (
+        title="Bot Message Distribution by Hour of Day (UTC)",
+        xtitle="Hour (24h format)",
+        ytitle="Message Count"
+    )

@@ -1,0 +1,10 @@
+// Production Events Only (Last 24 Hours)
+// Filters out test canvas data and shows recent production events
+
+customEvents
+| where timestamp between (ago(24h) .. now())
+| extend designMode = tostring(customDimensions.designMode)
+| where isempty(designMode) or tolower(designMode) != "true"
+| project timestamp, name, user_Id, cloud_RoleInstance
+| order by timestamp desc
+| take 100

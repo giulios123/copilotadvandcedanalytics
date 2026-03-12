@@ -1,0 +1,37 @@
+// ==============================================================================
+// API Dependency Health - External Service Call Monitoring
+// ==============================================================================
+// Description: Monitors health of external API calls and dependencies
+// Time Range: Last 7 days
+// ==============================================================================
+
+let _startTime = ago(7d);
+let _endTime = now();
+
+dependencies
+| where timestamp between (_startTime .. _endTime)
+| where cloud_RoleName == "Microsoft Copilot Studio"
+| summarize
+    TotalCalls = count(),
+    SuccessfulCalls = countif(success == true),
+    FailedCalls = countif(success == false),
+    AvgDuration = avg(duration),
+    P95Duration = percentile(duration, 95)
+    by
+    DependencyName = name,
+    DependencyType = type,
+    Target = target
+| extend
+    SuccessRate = round((todouble(SuccessfulCalls) / todouble(TotalCalls)) * 100, 2),
+    AvgDurationMs = round(AvgDuration, 2),
+    P95DurationMs = round(P95Duration, 2)
+| project
+    DependencyName,
+    DependencyType,
+    Target,
+    TotalCalls,
+    SuccessRate,
+    FailedCalls,
+    AvgDurationMs,
+    P95DurationMs
+| order by FailedCalls desc, AvgDurationMs desc

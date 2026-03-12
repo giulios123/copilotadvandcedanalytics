@@ -1,0 +1,7 @@
+// Quick Data Validation (Last Hour)
+// Verify data is flowing and inspect the schema
+
+customEvents
+| where timestamp between (ago(1h) .. now())
+| take 10
+| project timestamp, name, user_Id, cloud_RoleInstance, customDimensions

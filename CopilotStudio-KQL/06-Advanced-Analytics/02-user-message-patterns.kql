@@ -1,0 +1,46 @@
+// ==============================================================================
+// Message Content Patterns - Text Analysis
+// ==============================================================================
+// Description: Analyzes common patterns in bot messages
+// Time Range: Last 7 days
+// Fields Used: name (BotMessageSend), user_Id, customDimensions (designMode, message)
+// ==============================================================================
+
+let _startTime = ago(7d);
+let _endTime = now();
+
+customEvents
+| where timestamp between (_startTime .. _endTime)
+| where name == "BotMessageSend"
+| extend
+    isDesignMode = tostring(customDimensions['designMode']),
+    messageText = tostring(customDimensions['message'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| where isnotempty(messageText)
+| extend
+    MessageLength = strlen(messageText),
+    WordCount = array_length(split(messageText, " ")),
+    IsQuestion = messageText contains "?" or messageText contains "how" or messageText contains "what" or messageText contains "why",
+    ContainsGreeting = messageText contains "hello" or messageText contains "hi " or messageText contains "hey"
+| summarize
+    TotalMessages = count(),
+    AvgMessageLength = avg(MessageLength),
+    AvgWordCount = avg(WordCount),
+    QuestionCount = countif(IsQuestion == true),
+    GreetingCount = countif(ContainsGreeting == true),
+    UniqueUsers = dcount(user_Id)
+    by bin(timestamp, 1d)
+| extend
+    AvgMessageLength = round(AvgMessageLength, 2),
+    AvgWordCount = round(AvgWordCount, 2),
+    QuestionPercentage = round((todouble(QuestionCount) / todouble(TotalMessages)) * 100, 2),
+    GreetingPercentage = round((todouble(GreetingCount) / todouble(TotalMessages)) * 100, 2)
+| project
+    Date = timestamp,
+    TotalMessages,
+    UniqueUsers,
+    AvgMessageLength,
+    AvgWordCount,
+    QuestionPercentage,
+    GreetingPercentage
+| order by Date desc

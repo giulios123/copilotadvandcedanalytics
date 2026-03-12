@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started Guide - Copilot Studio Analytics</title>
+    <style>
+        body {
+            font-family: 'Calibri', 'Arial', sans-serif;
+            line-height: 1.6;
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 1in;
+            color: #333;
+            background-color: #fff;
+        }
+        h1 {
+            color: #0078D4;
+            font-size: 28pt;
+            margin-top: 0;
+            margin-bottom: 12pt;
+            border-bottom: 3px solid #0078D4;
+            padding-bottom: 8pt;
+        }
+        h2 {
+            color: #2B579A;
+            font-size: 20pt;
+            margin-top: 24pt;
+            margin-bottom: 12pt;
+            border-bottom: 2px solid #E1E1E1;
+            padding-bottom: 4pt;
+        }
+        h3 {
+            color: #2B579A;
+            font-size: 16pt;
+            margin-top: 18pt;
+            margin-bottom: 10pt;
+        }
+        h4 {
+            color: #2B579A;
+            font-size: 14pt;
+            margin-top: 12pt;
+            margin-bottom: 8pt;
+        }
+        p {
+            margin: 10pt 0;
+            font-size: 11pt;
+        }
+        .intro {
+            background-color: #F3F2F1;
+            padding: 16pt;
+            border-left: 4px solid #0078D4;
+            margin: 16pt 0;
+            font-size: 11pt;
+        }
+        .note {
+            background-color: #FFF4CE;
+            padding: 12pt;
+            border-left: 4px solid #FFB900;
+            margin: 12pt 0;
+            font-size: 10pt;
+        }
+        .success {
+            background-color: #DFF6DD;
+            padding: 12pt;
+            border-left: 4px solid #107C10;
+            margin: 12pt 0;
+            font-size: 10pt;
+        }
+        .warning {
+            background-color: #FDE7E9;
+            padding: 12pt;
+            border-left: 4px solid #D83B01;
+            margin: 12pt 0;
+            font-size: 10pt;
+        }
+        ul, ol {
+            margin: 10pt 0;
+            padding-left: 30pt;
+            font-size: 11pt;
+        }
+        li {
+            margin: 6pt 0;
+        }
+        code {
+            background-color: #F3F2F1;
+            padding: 2pt 6pt;
+            border-radius: 3pt;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 10pt;
+            color: #E81123;
+        }
+        pre {
+            background-color: #F3F2F1;
+            padding: 12pt;
+            border-left: 4px solid #0078D4;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 9pt;
+            line-height: 1.4;
+            margin: 12pt 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 12pt 0;
+            font-size: 10pt;
+        }
+        th {
+            background-color: #0078D4;
+            color: white;
+            padding: 8pt;
+            text-align: left;
+            border: 1px solid #0078D4;
+        }
+        td {
+            padding: 8pt;
+            border: 1px solid #E1E1E1;
+        }
+        tr:nth-child(even) {
+            background-color: #F9F9F9;
+        }
+        .toc {
+            background-color: #F3F2F1;
+            padding: 16pt;
+            margin: 16pt 0;
+            border: 1px solid #E1E1E1;
+        }
+        .toc h2 {
+            margin-top: 0;
+            border-bottom: none;
+            font-size: 16pt;
+        }
+        .toc ul {
+            padding-left: 20pt;
+        }
+        .footer {
+            margin-top: 48pt;
+            padding-top: 16pt;
+            border-top: 2px solid #E1E1E1;
+            font-size: 9pt;
+            color: #666;
+            text-align: center;
+        }
+        .checkmark {
+            color: #107C10;
+            font-weight: bold;
+        }
+        .step-box {
+            background-color: #E9F5FF;
+            padding: 12pt;
+            margin: 12pt 0;
+            border-left: 4px solid #0078D4;
+        }
+        .example-box {
+            background-color: #F9F9F9;
+            padding: 12pt;
+            margin: 12pt 0;
+            border: 1px solid #E1E1E1;
+        }
+        @media print {
+            body {
+                padding: 0.5in;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Getting Started Guide<br/>Copilot Studio Analytics</h1>
+
+<div class="intro">
+    <p><strong>Welcome!</strong> This guide will help you get started with monitoring and analyzing your Microsoft Copilot Studio bot using Azure Data Explorer dashboards.</p>
+    <p><strong>Target Audience:</strong> Beginners new to Copilot Studio monitoring, KQL queries, and Azure Data Explorer dashboards.</p>
+</div>
+
+<div class="toc">
+    <h2>Table of Contents</h2>
+    <ol>
+        <li>What Is This Project?</li>
+        <li>Prerequisites</li>
+        <li>Understanding the Project Structure</li>
+        <li>Quick Start (5 Minutes)</li>
+        <li>Detailed Setup Guide</li>
+        <li>Understanding KQL Queries</li>
+        <li>Working with Dashboards</li>
+        <li>Common Tasks</li>
+        <li>Troubleshooting</li>
+        <li>Next Steps</li>
+    </ol>
+</div>
+
+<div class="page-break"></div>
+
+<h2>1. What Is This Project?</h2>
+
+<h3>The Problem</h3>
+<p>You've built a Copilot Studio bot, but you need to answer questions like:</p>
+<ul>
+    <li>How many users are using my bot?</li>
+    <li>What times are busiest?</li>
+    <li>Are there any performance issues?</li>
+    <li>Which conversations are most common?</li>
+</ul>
+
+<h3>The Solution</h3>
+<p>This project provides:</p>
+<ol>
+    <li><strong>Ready-to-use KQL queries</strong> - Pre-written queries to analyze your bot data</li>
+    <li><strong>Azure Data Explorer dashboards</strong> - Visual dashboards you can import and use immediately</li>
+    <li><strong>Documentation</strong> - Guides to help you understand and customize everything</li>
+</ol>
+
+<h3>What You'll Get</h3>
+<div class="success">
+    <p><strong>📊 3 Pre-built Dashboards:</strong></p>
+    <ul>
+        <li>Overview Dashboard - High-level metrics</li>
+        <li>Performance Dashboard - Technical health monitoring</li>
+        <li>Conversation Analytics - User behavior analysis</li>
+    </ul>
+
+    <p><strong>📝 20+ KQL Query Files:</strong></p>
+    <ul>
+        <li>Organized by category (Usage, Performance, Quality, etc.)</li>
+        <li>Copy-paste ready</li>
+        <li>Well-documented with comments</li>
+    </ul>
+</div>
+
+<div class="page-break"></div>
+
+<h2>2. Prerequisites</h2>
+
+<h3>Required Access</h3>
+<div class="note">
+    <p><strong><span class="checkmark">✓</span> You MUST have:</strong></p>
+
+    <ol>
+        <li><strong>Microsoft Copilot Studio Bot</strong>
+            <ul>
+                <li>An active bot in Copilot Studio</li>
+                <li>Bot must be connected to Application Insights</li>
+            </ul>
+        </li>
+        <li><strong>Azure Subscription</strong>
+            <ul>
+                <li>Access to Azure Portal</li>
+                <li>Permissions to read Application Insights data</li>
+            </ul>
+        </li>
+        <li><strong>Application Insights</strong>
+            <ul>
+                <li>Your Copilot Studio bot connected to Application Insights</li>
+                <li>Data being collected (at least a few days worth)</li>
+            </ul>
+        </li>
+        <li><strong>Azure Data Explorer Access</strong>
+            <ul>
+                <li>Ability to access https://dataexplorer.azure.com</li>
+                <li>Read permissions on your Application Insights</li>
+            </ul>
+        </li>
+    </ol>
+</div>
+
+<h3>Optional (But Helpful)</h3>
+<p><span class="checkmark">✓</span> Nice to have:</p>
+<ul>
+    <li>Basic understanding of Azure services</li>
+    <li>Familiarity with data visualization concepts</li>
+    <li>A text editor (VS Code, Notepad++, etc.)</li>
+</ul>
+
+<h3>Tools Installation</h3>
+<div class="success">
+    <p><strong>No special tools required!</strong> Everything works in your web browser:</p>
+    <ul>
+        <li><span class="checkmark">✓</span> Web browser (Chrome, Edge, or Firefox)</li>
+        <li><span class="checkmark">✓</span> Access to Azure Portal</li>
+        <li><span class="checkmark">✓</span> Access to Azure Data Explorer</li>
+    </ul>
+</div>
+
+<div class="page-break"></div>
+
+<h2>3. Understanding the Project Structure</h2>
+
+<pre>
+CopilotStudio-KQL/
+├── Dashboards/                          ← Dashboard files ready to import
+│   ├── 01-Overview-Dashboard.json       ← High-level metrics
+│   ├── 02-Performance-Dashboard.json    ← Performance monitoring
+│   ├── 03-Conversation-Analytics-Dashboard.json ← User behavior
+│   ├── README.md                        ← Dashboard documentation
+│   └── SKILL.md                         ← Technical reference
+│
+├── 01-Usage-Metrics/                    ← KQL queries for usage analysis
+│   ├── 01-overall-bot-usage.kql
+│   ├── 02-active-users.kql
+│   ├── 04-peak-hours.kql
+│   └── ...
+│
+├── 02-Performance-Metrics/              ← KQL queries for performance
+│   ├── 01-response-latency.kql
+│   └── ...
+│
+├── 03-Quality-Metrics/                  ← KQL queries for quality
+├── 04-Agent-Evaluation/                 ← KQL queries for analytics
+├── 05-Dependencies/                     ← KQL queries for dependencies
+│
+└── Docs/                                ← Documentation (you are here!)
+    └── Getting-Started-Guide.md
+</pre>
+
+<h3>Key Files Explained</h3>
+<table>
+    <thead>
+        <tr>
+            <th>File</th>
+            <th>What It Is</th>
+            <th>When To Use</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>*.json</code> files in Dashboards/</td>
+            <td>Pre-configured dashboard definitions</td>
+            <td>Import these to create instant visual dashboards</td>
+        </tr>
+        <tr>
+            <td><code>*.kql</code> files in numbered folders</td>
+            <td>Individual queries you can run</td>
+            <td>Use when you want to run specific analysis queries</td>
+        </tr>
+        <tr>
+            <td><code>README.md</code> in Dashboards/</td>
+            <td>Dashboard user guide</td>
+            <td>Read this for dashboard usage instructions</td>
+        </tr>
+        <tr>
+            <td><code>SKILL.md</code> in Dashboards/</td>
+            <td>Technical reference</td>
+            <td>Use when troubleshooting or customizing</td>
+        </tr>
+        <tr>
+            <td>This guide</td>
+            <td>Beginner tutorial</td>
+            <td>Start here if you're new!</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<h2>4. Quick Start (5 Minutes)</h2>
+
+<p>Follow these steps to get your first dashboard running:</p>
+
+<h3>Step 1: Find Your Application Insights Details</h3>
+<div class="step-box">
+    <ol>
+        <li>Open <strong>Azure Portal</strong> (https://portal.azure.com)</li>
+        <li>Search for your Application Insights resource</li>
+        <li>Note down these three values:
+            <ul>
+                <li><strong>Subscription ID</strong> (found in Overview)</li>
+                <li><strong>Resource Group</strong> name</li>
+                <li><strong>Application Insights name</strong></li>
+            </ul>
+        </li>
+    </ol>
+</div>
+
+<div class="example-box">
+    <p><strong>Example:</strong></p>
+    <pre>Subscription ID: dc296289-f97a-48ef-9f15-cd0beaa285dc
+Resource Group: rg-copilot-prod
+App Insights Name: appi-copilot-bot-insights</pre>
+</div>
+
+<h3>Step 2: Open Azure Data Explorer</h3>
+<div class="step-box">
+    <ol>
+        <li>Go to https://dataexplorer.azure.com</li>
+        <li>Sign in with your Azure account</li>
+        <li>You should see the Azure Data Explorer interface</li>
+    </ol>
+</div>
+
+<h3>Step 3: Import Your First Dashboard</h3>
+<div class="step-box">
+    <ol>
+        <li>In Azure Data Explorer, click <strong>"Dashboards"</strong> in the left menu</li>
+        <li>Click <strong>"Import dashboard"</strong> (or "+" → Import)</li>
+        <li>Click <strong>"Browse"</strong> and select:<br/>
+            <code>CopilotStudio-KQL/Dashboards/01-Overview-Dashboard.json</code></li>
+        <li>The dashboard file will open</li>
+        <li>Click <strong>"Import"</strong></li>
+    </ol>
+</div>
+
+<div class="success">
+    <p><strong><span class="checkmark">✓</span> That's it!</strong> Your first dashboard is now imported.</p>
+</div>
+
+<h3>Step 4: View Your Data</h3>
+<div class="step-box">
+    <ol>
+        <li>The dashboard should load automatically</li>
+        <li>You'll see tiles showing metrics like:
+            <ul>
+                <li>Total Messages</li>
+                <li>Active Users</li>
+                <li>Message Volume Over Time</li>
+                <li>Peak Usage Hours</li>
+            </ul>
+        </li>
+    </ol>
+</div>
+
+<div class="note">
+    <p><strong>If tiles show "No data":</strong></p>
+    <ul>
+        <li>Check your time range (top of dashboard)</li>
+        <li>Verify your bot has been active during that time</li>
+        <li>See Troubleshooting section below</li>
+    </ul>
+</div>
+
+<div class="page-break"></div>
+
+<h2>5. Detailed Setup Guide</h2>
+
+<h3>Understanding Application Insights Connection</h3>
+<p>Your Copilot Studio bot sends telemetry data to Application Insights:</p>
+
+<pre>
+Copilot Studio Bot → Application Insights → Azure Data Explorer Dashboard
+                     (Automatic)          (You connect manually)
+</pre>
+
+<h4>How to verify the connection:</h4>
+<div class="step-box">
+    <ol>
+        <li>Open Azure Portal</li>
+        <li>Go to your Application Insights resource</li>
+        <li>Click <strong>"Logs"</strong> in the left menu</li>
+        <li>Run this simple query:
+            <pre>customEvents
+| where name == "BotMessageSend"
+| count</pre>
+        </li>
+        <li>If you see a number > 0, data is flowing! <span class="checkmark">✓</span></li>
+    </ol>
+</div>
+
+<h3>Configuring Dashboard Data Sources</h3>
+<div class="note">
+    <p><strong>Note:</strong> The dashboard JSON files are already pre-configured with placeholder values. You need to update them with your actual Azure resource details.</p>
+</div>
+
+<h4>Option 1: Edit Before Import (Recommended)</h4>
+<div class="step-box">
+    <ol>
+        <li>Open the dashboard JSON file in a text editor</li>
+        <li>Find the <code>dataSources</code> section (near the bottom)</li>
+        <li>Update these values:
+            <pre>"clusterUri": "https://ade.applicationinsights.io/subscriptions/YOUR-SUB-ID/resourcegroups/YOUR-RG/",
+"database": "YOUR-APPINSIGHTS-NAME"</pre>
+        </li>
+        <li>Replace:
+            <ul>
+                <li><code>YOUR-SUB-ID</code> → Your subscription ID</li>
+                <li><code>YOUR-RG</code> → Your resource group name</li>
+                <li><code>YOUR-APPINSIGHTS-NAME</code> → Your Application Insights name</li>
+            </ul>
+        </li>
+        <li>Save the file</li>
+        <li>Import to Azure Data Explorer</li>
+    </ol>
+</div>
+
+<h4>Option 2: Edit After Import</h4>
+<div class="step-box">
+    <ol>
+        <li>Import the dashboard as-is</li>
+        <li>In Azure Data Explorer, open the dashboard</li>
+        <li>Click <strong>"Edit"</strong> (pencil icon)</li>
+        <li>Click <strong>"Data sources"</strong> tab</li>
+        <li>Update the connection details</li>
+        <li>Click <strong>"Apply"</strong> and <strong>"Save"</strong></li>
+    </ol>
+</div>
+
+<div class="page-break"></div>
+
+<h2>6. Understanding KQL Queries</h2>
+
+<h3>What is KQL?</h3>
+<p><strong>KQL</strong> = <strong>K</strong>usto <strong>Q</strong>uery <strong>L</strong>anguage</p>
+<p>It's a language for querying data in Azure services. Think of it like SQL but optimized for log and telemetry data.</p>
+
+<h3>Basic KQL Structure</h3>
+<p>Every KQL query follows this pattern:</p>
+<pre>
+TableName                           ← Which table to query
+| where [condition]                 ← Filter the data
+| summarize [aggregation]           ← Calculate statistics
+| order by [column]                 ← Sort results
+</pre>
+
+<h3>Example: Count Bot Messages</h3>
+<pre>
+customEvents                        // Look in customEvents table
+| where name == "BotMessageSend"    // Only bot messages
+| where timestamp > ago(7d)         // Last 7 days
+| count                             // Count how many
+</pre>
+
+<div class="example-box">
+    <p><strong>What this does:</strong></p>
+    <ol>
+        <li>Looks at the <code>customEvents</code> table (where Copilot Studio logs events)</li>
+        <li>Filters for only "BotMessageSend" events (actual bot messages)</li>
+        <li>Filters for last 7 days</li>
+        <li>Counts them</li>
+    </ol>
+    <p><strong>Result:</strong> Single number like <code>1,234</code></p>
+</div>
+
+<h3>How to Run KQL Queries</h3>
+
+<h4>Method 1: In Azure Data Explorer Query Editor</h4>
+<div class="step-box">
+    <ol>
+        <li>Go to https://dataexplorer.azure.com</li>
+        <li>Click <strong>"Query"</strong> in the left menu</li>
+        <li>Make sure you're connected to your Application Insights:
+            <ul>
+                <li>Click <strong>"Add"</strong> → <strong>"Connection"</strong></li>
+                <li>Select <strong>"Application Insights"</strong></li>
+                <li>Choose your resource</li>
+            </ul>
+        </li>
+        <li>Paste a query from the <code>.kql</code> files</li>
+        <li>Click <strong>"Run"</strong> or press <code>Shift+Enter</code></li>
+    </ol>
+</div>
+
+<h4>Method 2: In Azure Portal</h4>
+<div class="step-box">
+    <ol>
+        <li>Go to your Application Insights resource</li>
+        <li>Click <strong>"Logs"</strong> in the left menu</li>
+        <li>Paste a query</li>
+        <li>Click <strong>"Run"</strong></li>
+    </ol>
+</div>
+
+<h3>Your First Query</h3>
+<p><strong>File:</strong> <code>01-Usage-Metrics/01-overall-bot-usage.kql</code></p>
+
+<pre>
+let queryStartDate = ago(14d);
+let queryEndDate = now();
+
+customEvents
+| where timestamp between (queryStartDate .. queryEndDate)
+| where name == "BotMessageSend"
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"
+| summarize MessageCount = count() by bin(timestamp, 1d)
+| order by timestamp asc
+| render timechart
+</pre>
+
+<h4>What each line does:</h4>
+<table>
+    <thead>
+        <tr>
+            <th>Line</th>
+            <th>Purpose</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>let queryStartDate = ago(14d)</code></td>
+            <td>Set start date to 14 days ago</td>
+        </tr>
+        <tr>
+            <td><code>let queryEndDate = now()</code></td>
+            <td>Set end date to now</td>
+        </tr>
+        <tr>
+            <td><code>customEvents</code></td>
+            <td>Query the customEvents table</td>
+        </tr>
+        <tr>
+            <td><code>where timestamp between (...)</code></td>
+            <td>Filter to date range</td>
+        </tr>
+        <tr>
+            <td><code>where name == "BotMessageSend"</code></td>
+            <td>Only actual bot messages</td>
+        </tr>
+        <tr>
+            <td><code>extend isDesignMode = ...</code></td>
+            <td>Extract the designMode field</td>
+        </tr>
+        <tr>
+            <td><code>where isempty(isDesignMode)...</code></td>
+            <td>Exclude test messages from canvas</td>
+        </tr>
+        <tr>
+            <td><code>summarize MessageCount = count() by bin(timestamp, 1d)</code></td>
+            <td>Count messages per day</td>
+        </tr>
+        <tr>
+            <td><code>order by timestamp asc</code></td>
+            <td>Sort by date ascending</td>
+        </tr>
+        <tr>
+            <td><code>render timechart</code></td>
+            <td>Display as a chart</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="success">
+    <p><strong>Result:</strong> A line chart showing messages per day over the last 14 days</p>
+</div>
+
+<div class="page-break"></div>
+
+<h2>7. Working with Dashboards</h2>
+
+<h3>Dashboard Components</h3>
+<p>Each dashboard has:</p>
+<ol>
+    <li><strong>Tiles</strong> - Individual visualization boxes (charts, tables, numbers)</li>
+    <li><strong>Parameters</strong> - Filters you can adjust (like time range)</li>
+    <li><strong>Queries</strong> - The KQL behind each tile (hidden from view)</li>
+    <li><strong>Pages</strong> - Multiple tabs to organize content</li>
+</ol>
+
+<h3>Using Dashboard Controls</h3>
+
+<h4>Time Range Selector</h4>
+<p>Found at the top of every dashboard:</p>
+<div class="example-box">
+    <p><code>[Time range: Last 14 days ▼]</code></p>
+</div>
+
+<p><strong>Change it to:</strong></p>
+<ul>
+    <li>Last 24 hours</li>
+    <li>Last 7 days</li>
+    <li>Last 14 days (default)</li>
+    <li>Last 30 days</li>
+    <li>Custom range</li>
+</ul>
+
+<h4>Refresh Dashboard</h4>
+<p>Click the <strong>🔄 Refresh</strong> button to reload data</p>
+<div class="note">
+    <p><strong>Auto-refresh:</strong> Dashboards refresh automatically every 5 minutes</p>
+</div>
+
+<h4>Export Data</h4>
+<div class="step-box">
+    <ol>
+        <li>Click on any tile</li>
+        <li>Click <strong>"..." menu</strong> in the corner</li>
+        <li>Select <strong>"Export to Excel"</strong> or <strong>"Export to CSV"</strong></li>
+    </ol>
+</div>
+
+<h3>Reading Dashboard Tiles</h3>
+
+<h4>Metric Cards (Single Numbers)</h4>
+<div class="example-box">
+    <pre>
+┌─────────────────────┐
+│ Total Messages      │
+│                     │
+│      1,234          │
+└─────────────────────┘
+    </pre>
+    <p><strong>What it shows:</strong> A single KPI value</p>
+</div>
+
+<h4>Line Charts</h4>
+<div class="example-box">
+    <pre>
+Message Volume Over Time
+  │    ╱╲
+  │   ╱  ╲  ╱╲
+  │  ╱    ╲╱  ╲
+  │ ╱          ╲
+  └──────────────
+   Mon  Tue  Wed
+    </pre>
+    <p><strong>What it shows:</strong> Trends over time</p>
+</div>
+
+<h4>Pie Charts</h4>
+<div class="example-box">
+    <pre>
+Channel Distribution
+     ╱───╲
+    │ 45% │ Teams
+    │ 35% │ Web
+    │ 20% │ Other
+     ╲───╱
+    </pre>
+    <p><strong>What it shows:</strong> Proportions and percentages</p>
+</div>
+
+<h4>Tables</h4>
+<div class="example-box">
+    <pre>
+┌─────────────┬──────┬────────┐
+│ Agent Name  │ Msgs │ Users  │
+├─────────────┼──────┼────────┤
+│ Bot-Agent-1 │ 450  │ 120    │
+│ Bot-Agent-2 │ 380  │ 95     │
+└─────────────┴──────┴────────┘
+    </pre>
+    <p><strong>What it shows:</strong> Detailed data in rows and columns</p>
+</div>
+
+<div class="page-break"></div>
+
+<h2>8. Common Tasks</h2>
+
+<h3>Task 1: Check Daily Bot Usage</h3>
+<p><strong>Question:</strong> "How many messages did my bot send today?"</p>
+
+<div class="step-box">
+    <p><strong>Solution:</strong></p>
+    <ol>
+        <li>Open <code>01-Overview-Dashboard.json</code> dashboard</li>
+        <li>Look at <strong>"Total Messages"</strong> tile</li>
+        <li>Change time range to <strong>"Last 24 hours"</strong></li>
+        <li>Read the number</li>
+    </ol>
+</div>
+
+<p><strong>Or run this query:</strong></p>
+<pre>
+customEvents
+| where timestamp > ago(1d)
+| where name == "BotMessageSend"
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"
+| count
+</pre>
+
+<h3>Task 2: Find Peak Usage Hours</h3>
+<p><strong>Question:</strong> "When is my bot busiest?"</p>
+
+<div class="step-box">
+    <p><strong>Solution:</strong></p>
+    <ol>
+        <li>Open <code>01-Overview-Dashboard.json</code> dashboard</li>
+        <li>Scroll to <strong>"Peak Usage Hours (UTC)"</strong> tile</li>
+        <li>Look for the highest bars/points in the chart</li>
+    </ol>
+</div>
+
+<p><strong>Or run this query:</strong></p>
+<pre>
+customEvents
+| where timestamp > ago(14d)
+| where name == "BotMessageSend"
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"
+| extend HourOfDay = hourofday(timestamp)
+| summarize MessageCount = count() by HourOfDay
+| order by MessageCount desc
+| take 5
+</pre>
+
+<h3>Task 3: Check Performance Issues</h3>
+<p><strong>Question:</strong> "Are there any slow API calls?"</p>
+
+<div class="step-box">
+    <p><strong>Solution:</strong></p>
+    <ol>
+        <li>Open <code>02-Performance-Dashboard.json</code> dashboard</li>
+        <li>Look at <strong>"Slow Dependencies (>2s)"</strong> tile</li>
+        <li>If the number is > 0, check <strong>"Dependency Health Overview"</strong> table</li>
+        <li>Sort by <strong>"AvgDurationMs"</strong> to find slowest calls</li>
+    </ol>
+</div>
+
+<h3>Task 4: Analyze User Engagement</h3>
+<p><strong>Question:</strong> "How engaged are my users?"</p>
+
+<div class="step-box">
+    <p><strong>Solution:</strong></p>
+    <ol>
+        <li>Open <code>03-Conversation-Analytics-Dashboard.json</code> dashboard</li>
+        <li>Look at <strong>"User Engagement Levels"</strong> table</li>
+        <li>Check distribution:
+            <ul>
+                <li>High Engagement = Power users</li>
+                <li>Medium = Regular users</li>
+                <li>Low/Minimal = Trying it out</li>
+            </ul>
+        </li>
+    </ol>
+</div>
+
+<h3>Task 5: Export Dashboard as PDF</h3>
+<div class="step-box">
+    <p><strong>Steps:</strong></p>
+    <ol>
+        <li>Open dashboard in Azure Data Explorer</li>
+        <li>Click <strong>"..."</strong> menu (top right)</li>
+        <li>Select <strong>"Print dashboard"</strong></li>
+        <li>In print dialog, select <strong>"Save as PDF"</strong></li>
+        <li>Choose location and save</li>
+    </ol>
+</div>
+
+<div class="page-break"></div>
+
+<h2>9. Troubleshooting</h2>
+
+<h3>Problem 1: Dashboard Shows No Data</h3>
+<p><strong>Symptoms:</strong> Tiles are empty or show "No data"</p>
+
+<h4>Possible Causes & Solutions:</h4>
+
+<div class="warning">
+    <p><strong>Cause 1: Time Range Too Old</strong></p>
+    <ul>
+        <li><strong>Fix:</strong> Change time range to include recent data</li>
+        <li><strong>Check:</strong> Click time selector, try "Last 24 hours"</li>
+    </ul>
+</div>
+
+<div class="warning">
+    <p><strong>Cause 2: Bot Not Connected to Application Insights</strong></p>
+    <ul>
+        <li><strong>Fix:</strong> Verify connection in Copilot Studio:
+            <ol>
+                <li>Open your bot in Copilot Studio</li>
+                <li>Go to <strong>Settings</strong> → <strong>Analytics</strong></li>
+                <li>Check Application Insights is connected</li>
+                <li>If not, connect it and wait 24 hours for data</li>
+            </ol>
+        </li>
+    </ul>
+</div>
+
+<div class="warning">
+    <p><strong>Cause 3: No Bot Activity</strong></p>
+    <ul>
+        <li><strong>Fix:</strong> Use your bot to generate test data</li>
+        <li><strong>Action:</strong> Have a test conversation with your bot</li>
+    </ul>
+</div>
+
+<div class="warning">
+    <p><strong>Cause 4: Wrong Application Insights Resource</strong></p>
+    <ul>
+        <li><strong>Fix:</strong> Verify you're querying the correct App Insights</li>
+        <li><strong>Check:</strong> In dashboard, click Edit → Data sources → Verify name</li>
+    </ul>
+</div>
+
+<h3>Problem 2: Query Returns Error</h3>
+
+<h4>Common Error Messages:</h4>
+
+<div class="warning">
+    <p><strong>Error: "Column 'activityType' not found"</strong></p>
+    <pre>'where' operator: Failed to resolve column or scalar expression named 'activityType'</pre>
+
+    <p><strong>Fix:</strong> Use correct event filtering</p>
+    <pre>// ❌ Wrong
+| where activityType == "message"
+
+// ✅ Correct
+| where name == "BotMessageSend"</pre>
+</div>
+
+<div class="warning">
+    <p><strong>Error: "Syntax error"</strong></p>
+
+    <p><strong>Fix:</strong> Check for:</p>
+    <ul>
+        <li>Missing quotes around strings</li>
+        <li>Typos in column names</li>
+        <li>Missing <code>|</code> pipe operators</li>
+    </ul>
+</div>
+
+<h3>Problem 3: Dashboard Import Fails</h3>
+<div class="warning">
+    <p><strong>Error Message:</strong> "Invalid dashboard format" or "UUID format error"</p>
+
+    <p><strong>Fix:</strong> Dashboard JSON is corrupted or wrong format</p>
+    <ul>
+        <li><strong>Action:</strong> Re-download the JSON file from the repository</li>
+        <li><strong>Check:</strong> Open in text editor, verify it's valid JSON</li>
+        <li><strong>Alternative:</strong> Copy contents from GitHub directly</li>
+    </ul>
+</div>
+
+<h3>Problem 4: Permission Denied</h3>
+<div class="warning">
+    <p><strong>Error Message:</strong> "Access denied" or "Insufficient permissions"</p>
+
+    <p><strong>Fix:</strong> You need read permissions on Application Insights</p>
+    <ul>
+        <li><strong>Contact:</strong> Your Azure administrator</li>
+        <li><strong>Request:</strong> Reader role on Application Insights resource</li>
+    </ul>
+</div>
+
+<div class="page-break"></div>
+
+<h2>10. Next Steps</h2>
+
+<h3>After You're Comfortable with Basics</h3>
+
+<div class="success">
+    <ol>
+        <li><strong>Explore More KQL Queries</strong>
+            <ul>
+                <li>Browse the numbered folders (<code>01-Usage-Metrics</code>, <code>02-Performance-Metrics</code>, etc.)</li>
+                <li>Try running different queries</li>
+                <li>Experiment with modifying them</li>
+            </ul>
+        </li>
+
+        <li><strong>Customize Dashboards</strong>
+            <ul>
+                <li>Edit tiles to change colors or layouts</li>
+                <li>Add new tiles with custom queries</li>
+                <li>Create your own dashboard from scratch</li>
+            </ul>
+        </li>
+
+        <li><strong>Set Up Alerts</strong>
+            <ul>
+                <li>Use Azure Monitor to create alerts</li>
+                <li>Get notified when metrics exceed thresholds</li>
+                <li>Example: Alert when error count > 10</li>
+            </ul>
+        </li>
+
+        <li><strong>Schedule Reports</strong>
+            <ul>
+                <li>Export dashboards as PDF</li>
+                <li>Email them to stakeholders</li>
+                <li>Create weekly/monthly reports</li>
+            </ul>
+        </li>
+
+        <li><strong>Deep Dive into Analytics</strong>
+            <ul>
+                <li>Read the SKILL.md technical reference</li>
+                <li>Study the KQL query patterns</li>
+                <li>Learn advanced KQL techniques</li>
+            </ul>
+        </li>
+    </ol>
+</div>
+
+<h3>Learning Resources</h3>
+
+<h4>Official Documentation</h4>
+<ul>
+    <li><strong>Azure Data Explorer:</strong> https://docs.microsoft.com/azure/data-explorer/</li>
+    <li><strong>KQL Reference:</strong> https://docs.microsoft.com/azure/data-explorer/kql-quick-reference</li>
+    <li><strong>Copilot Studio Analytics:</strong> https://docs.microsoft.com/power-virtual-agents/analytics-overview</li>
+</ul>
+
+<h4>Practice KQL</h4>
+<ul>
+    <li><strong>KQL Tutorial:</strong> https://docs.microsoft.com/azure/data-explorer/kusto/query/tutorial</li>
+    <li><strong>Sample Queries:</strong> Browse the <code>.kql</code> files in this project</li>
+    <li><strong>Interactive Demo:</strong> https://dataexplorer.azure.com/clusters/help/databases/Samples</li>
+</ul>
+
+<h4>Community</h4>
+<ul>
+    <li><strong>Microsoft Tech Community:</strong> https://techcommunity.microsoft.com/</li>
+    <li><strong>Azure Data Explorer Forum:</strong> Search for "Azure Data Explorer" on Microsoft Q&A</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2>Glossary of Terms</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Term</th>
+            <th>What It Means</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Application Insights</strong></td>
+            <td>Azure service that collects telemetry from apps and bots</td>
+        </tr>
+        <tr>
+            <td><strong>Azure Data Explorer (ADX)</strong></td>
+            <td>Service for analyzing large amounts of data with KQL</td>
+        </tr>
+        <tr>
+            <td><strong>Copilot Studio</strong></td>
+            <td>Microsoft platform for building AI chatbots</td>
+        </tr>
+        <tr>
+            <td><strong>customEvents</strong></td>
+            <td>Table in App Insights containing bot events</td>
+        </tr>
+        <tr>
+            <td><strong>dependencies</strong></td>
+            <td>Table containing external API calls and their performance</td>
+        </tr>
+        <tr>
+            <td><strong>Dashboard</strong></td>
+            <td>Visual interface showing multiple charts and metrics</td>
+        </tr>
+        <tr>
+            <td><strong>KQL</strong></td>
+            <td>Kusto Query Language - language for querying data</td>
+        </tr>
+        <tr>
+            <td><strong>Tile</strong></td>
+            <td>Individual visualization box on a dashboard</td>
+        </tr>
+        <tr>
+            <td><strong>BotMessageSend</strong></td>
+            <td>Event name when bot sends a message to user</td>
+        </tr>
+        <tr>
+            <td><strong>designMode</strong></td>
+            <td>Flag indicating test messages from Copilot Studio canvas</td>
+        </tr>
+        <tr>
+            <td><strong>cloud_RoleName</strong></td>
+            <td>Field identifying which application sent the data</td>
+        </tr>
+        <tr>
+            <td><strong>timestamp</strong></td>
+            <td>Date and time when event occurred</td>
+        </tr>
+        <tr>
+            <td><strong>bin()</strong></td>
+            <td>Function to group data into time buckets (hourly, daily, etc.)</td>
+        </tr>
+        <tr>
+            <td><strong>summarize</strong></td>
+            <td>KQL keyword to aggregate data (count, avg, sum, etc.)</td>
+        </tr>
+        <tr>
+            <td><strong>render</strong></td>
+            <td>KQL keyword to display results as chart</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<h2>FAQ (Frequently Asked Questions)</h2>
+
+<h4>Q: Do I need to know programming?</h4>
+<p><strong>A:</strong> No! You can use the pre-built dashboards without any coding. If you want to customize queries, basic understanding of SQL-like syntax helps but isn't required.</p>
+
+<h4>Q: How much does this cost?</h4>
+<p><strong>A:</strong></p>
+<ul>
+    <li>Application Insights: Pay for data ingestion (first 5GB/month free)</li>
+    <li>Azure Data Explorer: Free for querying existing App Insights data</li>
+    <li>Dashboards: Free</li>
+</ul>
+<p><strong>Typical cost:</strong> $10-50/month for small-medium bot usage</p>
+
+<h4>Q: Can I use this with multiple bots?</h4>
+<p><strong>A:</strong> Yes! Either:</p>
+<ol>
+    <li>Connect all bots to same Application Insights (simpler)</li>
+    <li>Create separate dashboards for each bot (more organized)</li>
+</ol>
+
+<h4>Q: How often is data updated?</h4>
+<p><strong>A:</strong></p>
+<ul>
+    <li>Application Insights: Near real-time (1-2 minutes)</li>
+    <li>Dashboard: Refreshes every 5 minutes automatically</li>
+</ul>
+
+<h4>Q: Can I share dashboards with my team?</h4>
+<p><strong>A:</strong> Yes!</p>
+<ol>
+    <li>In Azure Data Explorer, open the dashboard</li>
+    <li>Click <strong>"Share"</strong> button</li>
+    <li>Choose who to share with</li>
+    <li>They need read access to your Application Insights</li>
+</ol>
+
+<h4>Q: What if I break something?</h4>
+<p><strong>A:</strong> Don't worry! You can:</p>
+<ul>
+    <li>Re-import the original dashboard JSON files</li>
+    <li>Queries are read-only (they can't modify data)</li>
+    <li>You can't break Application Insights by querying it</li>
+</ul>
+
+<h4>Q: Where is my data stored?</h4>
+<p><strong>A:</strong></p>
+<ul>
+    <li>Your bot data stays in <strong>your</strong> Azure Application Insights</li>
+    <li>You control the data retention (default: 90 days)</li>
+    <li>This is YOUR data in YOUR Azure subscription</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2>Quick Reference Card</h2>
+<p><em>Print this section for easy reference!</em></p>
+
+<h3>Most Common Queries</h3>
+<pre>
+// Count total messages today
+customEvents
+| where timestamp > ago(1d)
+| where name == "BotMessageSend"
+| count
+
+// Active users last 7 days
+customEvents
+| where timestamp > ago(7d)
+| where name == "BotMessageSend"
+| summarize Users = dcount(user_Id)
+
+// Peak hour today
+customEvents
+| where timestamp > ago(1d)
+| where name == "BotMessageSend"
+| extend Hour = hourofday(timestamp)
+| summarize Count = count() by Hour
+| order by Count desc
+| take 1
+</pre>
+
+<h3>Dashboard Files Quick Reference</h3>
+<table>
+    <thead>
+        <tr>
+            <th>File</th>
+            <th>What to Use It For</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>01-Overview-Dashboard.json</code></td>
+            <td>Daily monitoring, usage stats</td>
+        </tr>
+        <tr>
+            <td><code>02-Performance-Dashboard.json</code></td>
+            <td>Technical health, API performance</td>
+        </tr>
+        <tr>
+            <td><code>03-Conversation-Analytics-Dashboard.json</code></td>
+            <td>User behavior, engagement</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Key KQL Patterns</h3>
+<pre>
+// Filter by date
+| where timestamp between (startDate .. endDate)
+
+// Count
+| count
+
+// Count distinct
+| summarize dcount(column)
+
+// Average
+| summarize avg(column)
+
+// Group by day
+| summarize count() by bin(timestamp, 1d)
+
+// Exclude test data
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"
+</pre>
+
+<div class="page-break"></div>
+
+<h2>Getting Help</h2>
+
+<h3>If You're Stuck</h3>
+<ol>
+    <li>Check the troubleshooting section in this guide</li>
+    <li>Read SKILL.md for technical details</li>
+    <li>Review the README.md in Dashboards folder</li>
+    <li>Test queries in Azure Data Explorer query editor</li>
+    <li>Check official Microsoft documentation</li>
+</ol>
+
+<h3>Before Asking for Help, Have Ready:</h3>
+<ul>
+    <li>Screenshot of the error/issue</li>
+    <li>Which dashboard or query you're using</li>
+    <li>Your Application Insights resource name</li>
+    <li>Time range you're querying</li>
+    <li>What you expected vs. what you got</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2>Congratulations! 🎉</h2>
+
+<div class="success">
+    <p><strong>You've completed the Getting Started Guide!</strong></p>
+
+    <p><strong>You now know how to:</strong></p>
+    <ul>
+        <li><span class="checkmark">✓</span> Import dashboards into Azure Data Explorer</li>
+        <li><span class="checkmark">✓</span> Run KQL queries to analyze bot data</li>
+        <li><span class="checkmark">✓</span> Read and understand dashboard tiles</li>
+        <li><span class="checkmark">✓</span> Troubleshoot common issues</li>
+        <li><span class="checkmark">✓</span> Customize and extend the analytics</li>
+    </ul>
+
+    <p><strong>Next:</strong> Start exploring your bot's data and discover insights!</p>
+</div>
+
+<div class="footer">
+    <p><strong>Document Version:</strong> 1.0</p>
+    <p><strong>Last Updated:</strong> 2026-03-11</p>
+    <p><strong>Feedback:</strong> Report issues or suggestions via your team's communication channel</p>
+    <p><strong>Happy Analyzing! 📊</strong></p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+// ==============================================================================
+// Overall Bot Usage - Messages Over Time
+// ==============================================================================
+// Description: Tracks total bot message events from Copilot Studio (excluding test canvas)
+// Time Range: Last 14 days
+// Bucket Size: 1 day
+// Fields Used: name (BotMessageSend), customDimensions (designMode)
+// ==============================================================================
+
+let queryStartDate = ago(14d);
+let queryEndDate = now();
+let groupByInterval = 1d;
+
+customEvents
+| where timestamp between (queryStartDate .. queryEndDate)  // Inclusive, avoids missing boundary events
+| where name == "BotMessageSend"  // Only count bot message send events
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| summarize MessageCount = count() by bin(timestamp, groupByInterval)
+| order by timestamp asc
+| render timechart
+    with (
+        title="Bot Message Volume Over Time (Production Only)",
+        xtitle="Date",
+        ytitle="Message Count"
+    )

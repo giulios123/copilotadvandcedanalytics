@@ -1,0 +1,18 @@
+// Conversation Session Duration (Last 7 Days)
+// Calculate how long users engage in conversations
+
+customEvents
+| where timestamp between (ago(7d) .. now())
+| extend designMode = tostring(customDimensions.designMode)
+| where isempty(designMode) or tolower(designMode) != "true"
+| summarize
+    StartTime = min(timestamp),
+    EndTime = max(timestamp),
+    EventCount = count()
+    by user_Id
+| extend DurationSeconds = datetime_diff('second', EndTime, StartTime)
+| where DurationSeconds > 0 and DurationSeconds < 3600
+| extend DurationMinutes = DurationSeconds / 60.0
+| project user_Id, EventCount, DurationMinutes, StartTime, EndTime
+| order by DurationMinutes desc
+| take 100

@@ -1,0 +1,37 @@
+// ==============================================================================
+// High Error Rate Alert - Exception Rate Exceeds Threshold
+// ==============================================================================
+// Description: Alert when exception count exceeds threshold in last hour
+// Time Range: Last 1 hour
+// Threshold: 10 exceptions
+// Use Case: Configure as Azure Monitor Alert
+// ==============================================================================
+
+let _startTime = ago(1h);
+let _endTime = now();
+let _errorThreshold = 10;
+
+exceptions
+| where timestamp between (_startTime .. _endTime)
+| where cloud_RoleName == "Microsoft Copilot Studio"
+| summarize
+    TotalExceptions = count(),
+    UniqueErrorTypes = dcount(type),
+    AffectedSessions = dcount(session_Id)
+| where TotalExceptions > _errorThreshold
+| extend
+    Severity = case(
+        TotalExceptions >= 50, "Critical",
+        TotalExceptions >= 25, "High",
+        TotalExceptions >= 10, "Medium",
+        "Low"
+    )
+| project
+    AlertTime = now(),
+    TimeWindow = "Last 1 Hour",
+    TotalExceptions,
+    UniqueErrorTypes,
+    AffectedSessions,
+    Threshold = _errorThreshold,
+    Severity,
+    Message = strcat(TotalExceptions, " exceptions detected in the last hour (threshold: ", _errorThreshold, ")")

@@ -1,0 +1,50 @@
+// ==============================================================================
+// User Engagement - User Activity Patterns
+// ==============================================================================
+// Description: Measures user engagement through interaction frequency and patterns
+// Time Range: Last 14 days
+// Fields Used: user_Id, name, customDimensions (designMode, message)
+// ==============================================================================
+
+let _startTime = ago(14d);
+let _endTime = now();
+
+customEvents
+| where timestamp between (_startTime .. _endTime)
+| extend
+    isDesignMode = tostring(customDimensions['designMode']),
+    messageText = tostring(customDimensions['message'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| where isnotempty(user_Id)
+| summarize
+    TotalInteractions = count(),
+    BotMessages = countif(name == "BotMessageSend"),
+    TopicStarts = countif(name == "TopicStart"),
+    FirstInteraction = min(timestamp),
+    LastInteraction = max(timestamp),
+    AvgMessageLength = avgif(strlen(messageText), name == "BotMessageSend" and isnotempty(messageText)),
+    DaysActive = dcount(bin(timestamp, 1d))
+    by user_Id
+| extend
+    EngagementDays = datetime_diff('day', LastInteraction, FirstInteraction) + 1,
+    AvgMessageLength = round(AvgMessageLength, 2),
+    AvgInteractionsPerDay = round(todouble(TotalInteractions) / todouble(DaysActive), 2)
+| extend EngagementLevel = case(
+    TotalInteractions >= 50 and DaysActive >= 7, "High Engagement",
+    TotalInteractions >= 20 and DaysActive >= 3, "Medium Engagement",
+    TotalInteractions >= 5, "Low Engagement",
+    "Minimal Engagement"
+)
+| project
+    UserId = user_Id,
+    TotalInteractions,
+    BotMessages,
+    TopicStarts,
+    AvgInteractionsPerDay,
+    DaysActive,
+    EngagementLevel,
+    AvgMessageLength,
+    FirstInteraction,
+    LastInteraction
+| order by TotalInteractions desc
+| take 100

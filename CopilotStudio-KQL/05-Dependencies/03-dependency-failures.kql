@@ -1,0 +1,39 @@
+// ==============================================================================
+// Dependency Failures - Failed External Calls Analysis
+// ==============================================================================
+// Description: Analyzes failed external service calls by type and error
+// Time Range: Last 7 days
+// ==============================================================================
+
+let _startTime = ago(7d);
+let _endTime = now();
+
+dependencies
+| where timestamp between (_startTime .. _endTime)
+| where cloud_RoleName == "Microsoft Copilot Studio"
+| where success == false
+| summarize
+    FailureCount = count(),
+    FirstFailure = min(timestamp),
+    LastFailure = max(timestamp),
+    SampleResultCodes = make_set(resultCode, 5),
+    SampleData = make_set(data, 3)
+    by
+    DependencyName = name,
+    DependencyType = type,
+    Target = target,
+    CloudRole = cloud_RoleName
+| extend DaysSinceFirst = datetime_diff('day', now(), FirstFailure)
+| project
+    DependencyName,
+    DependencyType,
+    Target,
+    CloudRole,
+    FailureCount,
+    FirstFailure,
+    LastFailure,
+    DaysSinceFirst,
+    SampleResultCodes,
+    SampleData
+| order by FailureCount desc
+| take 50

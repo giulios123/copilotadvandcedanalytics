@@ -1,0 +1,9 @@
+// Top 10 Most Active Users Today
+// Quick snapshot of today's power users
+
+customEvents
+| where timestamp between (startofday(now()) .. now())
+| extend designMode = tostring(customDimensions.designMode)
+| where isempty(designMode) or tolower(designMode) != "true"
+| summarize EventCount = count() by user_Id
+| top 10 by EventCount desc

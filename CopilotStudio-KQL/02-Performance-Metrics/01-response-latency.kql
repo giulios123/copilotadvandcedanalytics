@@ -1,0 +1,40 @@
+// ==============================================================================
+// Response Latency - Bot Response Time Analysis
+// ==============================================================================
+// Description: Monitors response times from dependencies (bot responses to user)
+// Time Range: Last 7 days
+// Note: Uses dependencies table for bot API call performance
+// ==============================================================================
+
+let _startTime = ago(7d);
+let _endTime = now();
+
+dependencies
+| where timestamp between (_startTime .. _endTime)
+| where cloud_RoleName == "Microsoft Copilot Studio"
+| summarize
+    AvgLatency = avg(duration),
+    P50 = percentile(duration, 50),
+    P95 = percentile(duration, 95),
+    P99 = percentile(duration, 99),
+    RequestCount = count()
+    by bin(timestamp, 1h)
+| extend
+    AvgLatencyMs = round(AvgLatency, 2),
+    P50Ms = round(P50, 2),
+    P95Ms = round(P95, 2),
+    P99Ms = round(P99, 2)
+| project
+    Timestamp = timestamp,
+    RequestCount,
+    AvgLatencyMs,
+    P50Ms,
+    P95Ms,
+    P99Ms
+| order by Timestamp asc
+| render timechart
+    with (
+        title="Bot Response Latency (P50, P95, P99)",
+        xtitle="Time",
+        ytitle="Latency (ms)"
+    )

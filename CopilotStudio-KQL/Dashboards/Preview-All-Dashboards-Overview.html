@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copilot Studio Dashboards - Complete Overview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            padding: 40px 20px;
+        }
+
+        .presentation-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .title-slide {
+            background: white;
+            border-radius: 12px;
+            padding: 60px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .main-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #0078d4;
+            margin-bottom: 20px;
+        }
+
+        .main-subtitle {
+            font-size: 24px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .dashboard-preview {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .preview-header {
+            padding: 30px;
+            border-bottom: 3px solid #e5e7eb;
+        }
+
+        .preview-number {
+            display: inline-block;
+            background: #0078d4;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .preview-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0078d4;
+            margin-bottom: 12px;
+        }
+
+        .preview-desc {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .preview-content {
+            padding: 40px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 24px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #0078d4;
+        }
+
+        .chart-preview {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+            height: 200px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0369a1;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .key-features {
+            background: #f8f9fa;
+            padding: 24px;
+            border-radius: 8px;
+            margin-top: 32px;
+        }
+
+        .key-features h3 {
+            font-size: 18px;
+            color: #0078d4;
+            margin-bottom: 16px;
+        }
+
+        .key-features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .key-features li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            color: #555;
+        }
+
+        .key-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #0078d4;
+            font-weight: bold;
+        }
+
+        .implementation-info {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0078d4;
+            margin-bottom: 24px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+
+        .info-section h4 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .info-section p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .tech-badge {
+            background: #0078d4;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .dashboard-preview {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Title Slide -->
+        <div class="title-slide">
+            <div class="main-title">Microsoft Copilot Studio</div>
+            <div class="main-subtitle">Analytics & Monitoring Dashboards</div>
+            <p style="color: #888; font-size: 16px; margin-bottom: 40px;">
+                Comprehensive KQL-based monitoring solution for Azure Data Explorer
+            </p>
+
+            <div class="features-grid">
+                <div class="feature-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">Usage Analytics</div>
+                    <div class="feature-desc">Track user engagement, message volume, and conversation patterns</div>
+                </div>
+                <div class="feature-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Performance</div>
+                    <div class="feature-desc">Monitor latency, dependencies, and system health metrics</div>
+                </div>
+                <div class="feature-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <div class="feature-icon">💬</div>
+                    <div class="feature-title">Conversations</div>
+                    <div class="feature-desc">Deep dive into conversation quality and user behavior</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard 1: Overview -->
+        <div class="dashboard-preview">
+            <div class="preview-header">
+                <div class="preview-number">1</div>
+                <div class="preview-title">Overview Dashboard</div>
+                <div class="preview-desc">
+                    High-level operational metrics providing a comprehensive view of bot usage,
+                    user engagement, and channel distribution across the last 14 days.
+                </div>
+            </div>
+            <div class="preview-content">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Total Messages</div>
+                        <div class="metric-value">24.5K</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Active Users</div>
+                        <div class="metric-value">1,842</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Conversations</div>
+                        <div class="metric-value">3,456</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Active Channels</div>
+                        <div class="metric-value">5</div>
+                    </div>
+                </div>
+
+                <div class="chart-preview">
+                    📈 Message Volume & User Activity Trends
+                </div>
+
+                <div class="key-features">
+                    <h3>Key Capabilities</h3>
+                    <ul>
+                        <li>Real-time message volume tracking across all channels</li>
+                        <li>Daily active user trends with retention analysis</li>
+                        <li>Channel distribution (Teams, Web Chat, Direct Line)</li>
+                        <li>User retention segmentation (New, Occasional, Regular, Frequent)</li>
+                        <li>Locale and language distribution analysis</li>
+                        <li>Peak usage hours for capacity planning</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard 2: Performance -->
+        <div class="dashboard-preview">
+            <div class="preview-header">
+                <div class="preview-number" style="background: #d32f2f;">2</div>
+                <div class="preview-title" style="color: #d32f2f;">Performance Dashboard</div>
+                <div class="preview-desc">
+                    Technical performance monitoring with focus on dependency health, response times,
+                    and exception tracking to ensure optimal bot performance and reliability.
+                </div>
+            </div>
+            <div class="preview-content">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Avg Latency</div>
+                        <div class="metric-value" style="color: #d32f2f;">342ms</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">P95 Latency</div>
+                        <div class="metric-value" style="color: #d32f2f;">1,285ms</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Success Rate</div>
+                        <div class="metric-value" style="color: #2e7d32;">98.7%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Slow Calls (>2s)</div>
+                        <div class="metric-value" style="color: #d32f2f;">127</div>
+                    </div>
+                </div>
+
+                <div class="chart-preview" style="background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); color: #c62828;">
+                    ⚡ Latency Trends (Average, P50, P95) & Exception Monitoring
+                </div>
+
+                <div class="key-features">
+                    <h3>Key Capabilities</h3>
+                    <ul>
+                        <li>Multi-percentile latency tracking (P50, P95, P99)</li>
+                        <li>Dependency health monitoring (Azure OpenAI, Dataverse, Power Automate)</li>
+                        <li>Slow response identification and alerting (>2s threshold)</li>
+                        <li>Exception trend analysis with error categorization</li>
+                        <li>Success rate tracking by dependency type</li>
+                        <li>Performance degradation detection</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard 3: Conversation Analytics -->
+        <div class="dashboard-preview">
+            <div class="preview-header">
+                <div class="preview-number" style="background: #00897b;">3</div>
+                <div class="preview-title" style="color: #00897b;">Conversation Analytics Dashboard</div>
+                <div class="preview-desc">
+                    Deep behavioral analysis of user interactions, conversation patterns, and engagement
+                    metrics to optimize bot effectiveness and user experience.
+                </div>
+            </div>
+            <div class="preview-content">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Avg Messages/Conv</div>
+                        <div class="metric-value" style="color: #00897b;">7.12</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Avg Msg Length</div>
+                        <div class="metric-value" style="color: #00897b;">142ch</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Unique Locales</div>
+                        <div class="metric-value" style="color: #00897b;">18</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Activity Types</div>
+                        <div class="metric-value" style="color: #00897b;">6</div>
+                    </div>
+                </div>
+
+                <div class="chart-preview" style="background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); color: #00695c;">
+                    💬 Conversation Length Distribution & User Engagement Patterns
+                </div>
+
+                <div class="key-features">
+                    <h3>Key Capabilities</h3>
+                    <ul>
+                        <li>Conversation length distribution (Single, Short, Medium, Long)</li>
+                        <li>User engagement level segmentation (High, Medium, Low, Minimal)</li>
+                        <li>Message pattern analysis (length, word count, questions)</li>
+                        <li>Activity type distribution breakdown</li>
+                        <li>Top user identification and behavior tracking</li>
+                        <li>Conversation quality metrics and trends</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Implementation Information -->
+        <div class="implementation-info">
+            <div class="info-title">Implementation Details</div>
+            <div class="info-grid">
+                <div class="info-section">
+                    <h4>📋 Prerequisites</h4>
+                    <p>
+                        • Azure subscription with appropriate permissions<br>
+                        • Application Insights resource configured for Copilot Studio<br>
+                        • Azure Data Explorer cluster (or use free cluster)<br>
+                        • Data connection between App Insights and Azure Data Explorer
+                    </p>
+                </div>
+                <div class="info-section">
+                    <h4>🚀 Deployment</h4>
+                    <p>
+                        • Import dashboard JSON files into Azure Data Explorer<br>
+                        • Configure data source connection to Application Insights<br>
+                        • Adjust time ranges and filters as needed<br>
+                        • Set up auto-refresh intervals (recommended: 5 minutes)
+                    </p>
+                </div>
+                <div class="info-section">
+                    <h4>🔧 Customization</h4>
+                    <p>
+                        • All KQL queries use corrected syntax (timestamp between, isDesignMode handling)<br>
+                        • Queries handle missing dimensions for new channels<br>
+                        • Thresholds can be adjusted in individual queries<br>
+                        • Additional visualizations can be added using the base queries
+                    </p>
+                </div>
+                <div class="info-section">
+                    <h4>📊 Data Freshness</h4>
+                    <p>
+                        • Application Insights ingestion: Near real-time (2-5 min)<br>
+                        • Azure Data Explorer sync: Configurable (recommend 1-5 min)<br>
+                        • Dashboard refresh: Auto (5 min default)<br>
+                        • Historical data: 90 days retention (configurable)
+                    </p>
+                </div>
+            </div>
+
+            <div style="margin-top: 32px;">
+                <h4 style="margin-bottom: 16px;">Technology Stack</h4>
+                <div class="tech-stack">
+                    <div class="tech-badge">Microsoft Copilot Studio</div>
+                    <div class="tech-badge">Azure Application Insights</div>
+                    <div class="tech-badge">Azure Data Explorer (Kusto)</div>
+                    <div class="tech-badge">KQL (Kusto Query Language)</div>
+                    <div class="tech-badge">Azure Monitor</div>
+                    <div class="tech-badge">Power BI (Optional)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

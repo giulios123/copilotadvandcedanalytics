@@ -1,0 +1,49 @@
+// ==============================================================================
+// User Session Length - Events Per User Session Analysis
+// ==============================================================================
+// Description: Analyzes interaction patterns by grouping events per user per day
+// Time Range: Last 7 days
+// Fields Used: user_Id, name (BotMessageSend), customDimensions (designMode)
+// ==============================================================================
+
+let _startTime = ago(7d);
+let _endTime = now();
+
+customEvents
+| where timestamp between (_startTime .. _endTime)
+| where name == "BotMessageSend"
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| where isnotempty(user_Id)
+| summarize
+    MessageCount = count(),
+    SessionStart = min(timestamp),
+    SessionEnd = max(timestamp)
+    by user_Id, SessionDate = bin(timestamp, 1d)
+| extend
+    SessionDurationMinutes = round(datetime_diff('minute', SessionEnd, SessionStart), 2),
+    LengthCategory = case(
+        MessageCount == 1, "Single Message",
+        MessageCount <= 5, "Short (2-5 messages)",
+        MessageCount <= 15, "Medium (6-15 messages)",
+        MessageCount <= 30, "Long (16-30 messages)",
+        "Very Long (30+ messages)"
+    )
+| summarize
+    SessionCount = count(),
+    AvgMessages = avg(MessageCount),
+    AvgDurationMinutes = avg(SessionDurationMinutes)
+    by LengthCategory
+| extend
+    AvgMessages = round(AvgMessages, 2),
+    AvgDurationMinutes = round(AvgDurationMinutes, 2)
+| project
+    LengthCategory,
+    SessionCount,
+    AvgMessages,
+    AvgDurationMinutes
+| order by SessionCount desc
+| render columnchart
+    with (
+        title="User Session Length Distribution"
+    )

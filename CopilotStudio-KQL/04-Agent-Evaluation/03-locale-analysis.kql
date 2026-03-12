@@ -1,0 +1,37 @@
+// ==============================================================================
+// Agent Instance Analysis - Activity Distribution by Agent
+// ==============================================================================
+// Description: Analyzes activity distribution across different agent instances
+// Time Range: Last 14 days
+// Fields Used: cloud_RoleInstance (agent name), user_Id, name, customDimensions (designMode)
+// ==============================================================================
+
+let _startTime = ago(14d);
+let _endTime = now();
+
+customEvents
+| where timestamp between (_startTime .. _endTime)
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| where isnotempty(cloud_RoleInstance)
+| summarize
+    TotalEvents = count(),
+    BotMessages = countif(name == "BotMessageSend"),
+    TopicStarts = countif(name == "TopicStart"),
+    TopicEnds = countif(name == "TopicEnd"),
+    UniqueUsers = dcount(user_Id),
+    FirstEvent = min(timestamp),
+    LastEvent = max(timestamp)
+    by AgentName = cloud_RoleInstance
+| extend DaysActive = datetime_diff('day', LastEvent, FirstEvent) + 1
+| project
+    AgentName,
+    TotalEvents,
+    BotMessages,
+    TopicStarts,
+    TopicEnds,
+    UniqueUsers,
+    DaysActive,
+    FirstEvent,
+    LastEvent
+| order by TotalEvents desc

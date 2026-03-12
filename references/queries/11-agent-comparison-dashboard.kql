@@ -1,0 +1,17 @@
+// Agent Comparison Dashboard (Last 7 Days)
+// Multi-metric comparison across agents
+
+customEvents
+| where timestamp between (ago(7d) .. now())
+| extend designMode = tostring(customDimensions.designMode)
+| where isempty(designMode) or tolower(designMode) != "true"
+| summarize
+    TotalEvents = count(),
+    UniqueUsers = dcount(user_Id),
+    AvgEventsPerUser = count() / dcount(user_Id),
+    BotMessages = countif(name == "BotMessageSend"),
+    TopicsStarted = countif(name == "TopicStart"),
+    TopicsCompleted = countif(name == "TopicEnd")
+    by cloud_RoleInstance
+| extend TopicCompletionRate = round(100.0 * TopicsCompleted / TopicsStarted, 2)
+| order by TotalEvents desc

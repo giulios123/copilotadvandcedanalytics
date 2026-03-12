@@ -1,0 +1,26 @@
+// ==============================================================================
+// Active Users - Unique Users Over Time
+// ==============================================================================
+// Description: Tracks distinct users interacting with Copilot Studio bot
+// Time Range: Last 14 days
+// Bucket Size: 1 day
+// Fields Used: user_Id, customDimensions (designMode)
+// ==============================================================================
+
+let queryStartDate = ago(14d);
+let queryEndDate = now();
+let groupByInterval = 1d;
+
+customEvents
+| where timestamp between (queryStartDate .. queryEndDate)  // Inclusive, avoids missing boundary events
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| where isnotempty(user_Id)
+| summarize UniqueUsers = dcount(user_Id) by bin(timestamp, groupByInterval)
+| order by timestamp asc
+| render timechart
+    with (
+        title="Daily Active Users (Production)",
+        xtitle="Date",
+        ytitle="Unique Users"
+    )

@@ -1,0 +1,10 @@
+// Event Rate (Events per Minute - Last Hour)
+// Monitor event throughput for capacity planning
+
+customEvents
+| where timestamp between (ago(1h) .. now())
+| extend designMode = tostring(customDimensions.designMode)
+| where isempty(designMode) or tolower(designMode) != "true"
+| summarize EventCount = count() by bin(timestamp, 1m)
+| order by timestamp asc
+| render timechart

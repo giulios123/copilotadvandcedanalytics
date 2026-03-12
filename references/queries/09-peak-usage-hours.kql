@@ -1,0 +1,11 @@
+// Peak Usage Hours (Last 7 Days)
+// Identify when users are most active - heatmap data
+
+customEvents
+| where timestamp between (ago(7d) .. now())
+| extend designMode = tostring(customDimensions.designMode)
+| where isempty(designMode) or tolower(designMode) != "true"
+| extend HourOfDay = hourofday(timestamp)
+| extend DayOfWeek = dayofweek(timestamp)
+| summarize EventCount = count() by HourOfDay, DayOfWeek
+| order by DayOfWeek asc, HourOfDay asc

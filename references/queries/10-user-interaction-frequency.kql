@@ -1,0 +1,17 @@
+// User Interaction Frequency (Last 14 Days)
+// Identify most active users and their engagement patterns
+
+customEvents
+| where timestamp between (ago(14d) .. now())
+| extend designMode = tostring(customDimensions.designMode)
+| where isempty(designMode) or tolower(designMode) != "true"
+| summarize
+    TotalInteractions = count(),
+    UniqueAgents = dcount(cloud_RoleInstance),
+    FirstSeen = min(timestamp),
+    LastSeen = max(timestamp)
+    by user_Id
+| extend DaysSinceFirst = datetime_diff('day', now(), FirstSeen)
+| where TotalInteractions >= 2
+| order by TotalInteractions desc
+| take 50

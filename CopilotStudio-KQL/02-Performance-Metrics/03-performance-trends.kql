@@ -1,0 +1,34 @@
+// ==============================================================================
+// Performance Trends - Response Time Trends Over Time
+// ==============================================================================
+// Description: Tracks performance trends to detect degradation
+// Time Range: Last 30 days
+// Bucket Size: 1 day
+// ==============================================================================
+
+let _startTime = ago(30d);
+let _endTime = now();
+
+dependencies
+| where timestamp between (_startTime .. _endTime)
+| where cloud_RoleName == "Microsoft Copilot Studio"
+| summarize
+    AvgDuration = avg(duration),
+    P95Duration = percentile(duration, 95),
+    RequestCount = count()
+    by bin(timestamp, 1d)
+| extend
+    AvgDurationMs = round(AvgDuration, 2),
+    P95DurationMs = round(P95Duration, 2)
+| project
+    Date = timestamp,
+    AvgDurationMs,
+    P95DurationMs,
+    RequestCount
+| order by Date asc
+| render timechart
+    with (
+        title="Bot Performance Trends (30 Days)",
+        xtitle="Date",
+        ytitle="Duration (ms)"
+    )

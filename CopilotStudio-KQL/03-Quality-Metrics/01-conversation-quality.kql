@@ -1,0 +1,33 @@
+// ==============================================================================
+// Conversation Quality - Bot Activity Analysis
+// ==============================================================================
+// Description: Analyzes quality of bot interactions by tracking message events
+// Time Range: Last 7 days
+// Fields Used: name (BotMessageSend), user_Id, customDimensions (designMode, message)
+// ==============================================================================
+
+let _startTime = ago(7d);
+let _endTime = now();
+
+customEvents
+| where timestamp between (_startTime .. _endTime)
+| where name == "BotMessageSend"
+| extend
+    isDesignMode = tostring(customDimensions['designMode']),
+    messageText = tostring(customDimensions['message'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| summarize
+    TotalMessages = count(),
+    UniqueUsers = dcount(user_Id),
+    MessagesWithText = countif(isnotempty(messageText))
+    by bin(timestamp, 1h)
+| extend
+    AvgMessagesPerUser = round(todouble(TotalMessages) / todouble(UniqueUsers), 2),
+    MessageCompletionRate = round((todouble(MessagesWithText) / todouble(TotalMessages)) * 100, 2)
+| project
+    Timestamp = timestamp,
+    TotalMessages,
+    UniqueUsers,
+    AvgMessagesPerUser,
+    MessageCompletionRate
+| order by Timestamp asc

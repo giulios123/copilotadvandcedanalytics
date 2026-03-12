@@ -1,0 +1,10 @@
+// Hourly Event Trends by Type (Last 7 Days)
+// Time-series view of event types
+
+customEvents
+| where timestamp between (ago(7d) .. now())
+| extend designMode = tostring(customDimensions.designMode)
+| where isempty(designMode) or tolower(designMode) != "true"
+| summarize EventCount = count() by name, bin(timestamp, 1h)
+| order by timestamp asc
+| render timechart

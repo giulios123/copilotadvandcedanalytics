@@ -1,0 +1,30 @@
+// ==============================================================================
+// Slow Dependencies - Identify Performance Bottlenecks
+// ==============================================================================
+// Description: Lists slow external API calls that impact bot performance
+// Time Range: Last 24 hours
+// Threshold: > 2000ms
+// ==============================================================================
+
+let _startTime = ago(24h);
+let _endTime = now();
+let _thresholdMs = 2000;
+
+dependencies
+| where timestamp between (_startTime .. _endTime)
+| where cloud_RoleName == "Microsoft Copilot Studio"
+| where duration > _thresholdMs
+| extend DurationSeconds = round(duration / 1000, 2)
+| project
+    Timestamp = timestamp,
+    DependencyName = name,
+    DependencyType = type,
+    Target = target,
+    DurationSeconds,
+    Success = success,
+    ResultCode = resultCode,
+    Data = data,
+    CloudRole = cloud_RoleName,
+    CloudInstance = cloud_RoleInstance
+| order by DurationSeconds desc
+| take 100

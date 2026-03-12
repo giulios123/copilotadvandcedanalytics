@@ -1,0 +1,11 @@
+// Topic Start vs Topic End Analysis (Last 7 Days)
+// Track topic lifecycle events
+
+customEvents
+| where timestamp between (ago(7d) .. now())
+| where name in ("TopicStart", "TopicEnd")
+| extend designMode = tostring(customDimensions.designMode)
+| where isempty(designMode) or tolower(designMode) != "true"
+| summarize Count = count() by name, bin(timestamp, 1h)
+| order by timestamp asc
+| render timechart

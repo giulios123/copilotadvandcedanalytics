@@ -1,0 +1,37 @@
+// ==============================================================================
+// Event Flow Analysis - Event Type Transitions
+// ==============================================================================
+// Description: Analyzes how events transition from one type to another
+// Time Range: Last 7 days
+// Fields Used: name (BotMessageSend/TopicStart/TopicEnd), user_Id, customDimensions (designMode)
+// ==============================================================================
+
+let _startTime = ago(7d);
+let _endTime = now();
+
+customEvents
+| where timestamp between (_startTime .. _endTime)
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| where isnotempty(name) and isnotempty(user_Id)
+| order by user_Id asc, timestamp asc
+| serialize
+| extend
+    PreviousEventType = prev(name, 1),
+    PreviousUser = prev(user_Id, 1)
+| extend IsTransition = (user_Id == PreviousUser and name != PreviousEventType)
+| where IsTransition == true
+| summarize
+    TransitionCount = count(),
+    UniqueUsers = dcount(user_Id)
+    by
+    FromEvent = PreviousEventType,
+    ToEvent = name
+| where TransitionCount > 5
+| project
+    FromEvent,
+    ToEvent,
+    TransitionCount,
+    UniqueUsers
+| order by TransitionCount desc
+| take 50

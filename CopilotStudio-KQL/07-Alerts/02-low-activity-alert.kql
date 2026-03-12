@@ -1,0 +1,45 @@
+// ==============================================================================
+// Low Activity Alert - Bot Activity Drop Detection
+// ==============================================================================
+// Description: Alert when bot activity drops significantly compared to baseline
+// Time Range: Last 1 hour vs Previous 24 hours baseline
+// Threshold: 50% drop from baseline
+// Use Case: Configure as Azure Monitor Alert
+// ==============================================================================
+
+let _currentStartTime = ago(1h);
+let _currentEndTime = now();
+let _baselineStartTime = ago(25h);
+let _baselineEndTime = ago(1h);
+let _dropThreshold = 50.0;
+
+let CurrentActivity = customEvents
+| where timestamp between (_currentStartTime .. _currentEndTime)
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| summarize CurrentCount = count();
+
+let BaselineActivity = customEvents
+| where timestamp between (_baselineStartTime .. _baselineEndTime)
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| summarize BaselineCount = count()
+| extend BaselineHourlyAvg = todouble(BaselineCount) / 24;
+
+CurrentActivity
+| extend dummy = 1
+| join kind=inner (BaselineActivity | extend dummy = 1) on dummy
+| project-away dummy, dummy1
+| extend DropPercentage = round(((BaselineHourlyAvg - CurrentCount) / BaselineHourlyAvg) * 100, 2)
+| where DropPercentage > _dropThreshold or CurrentCount == 0
+| project
+    AlertTime = now(),
+    CurrentCount,
+    BaselineHourlyAvg = round(BaselineHourlyAvg, 2),
+    DropPercentage,
+    Severity = case(
+        DropPercentage >= 80 or CurrentCount == 0, "Critical",
+        DropPercentage >= 65, "High",
+        "Medium"
+    ),
+    Message = strcat("Bot activity dropped by ", DropPercentage, "% (current: ", CurrentCount, ", baseline: ", round(BaselineHourlyAvg, 2), ")")

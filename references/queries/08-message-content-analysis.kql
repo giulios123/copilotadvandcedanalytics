@@ -1,0 +1,13 @@
+// Message Content Analysis (Last 24 Hours)
+// Extract and analyze message text from BotMessageSend events
+
+customEvents
+| where timestamp between (ago(24h) .. now())
+| where name == "BotMessageSend"
+| extend designMode = tostring(customDimensions.designMode)
+| extend messageText = tostring(customDimensions.message)
+| where isempty(designMode) or tolower(designMode) != "true"
+| where isnotempty(messageText)
+| project timestamp, user_Id, cloud_RoleInstance, messageText
+| order by timestamp desc
+| take 100

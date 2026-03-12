@@ -1,0 +1,10 @@
+// Event Volume by Type (Last 7 Days)
+// Count of each event type in production
+
+customEvents
+| where timestamp between (ago(7d) .. now())
+| extend designMode = tostring(customDimensions.designMode)
+| where isempty(designMode) or tolower(designMode) != "true"
+| summarize EventCount = count() by name
+| order by EventCount desc
+| render barchart

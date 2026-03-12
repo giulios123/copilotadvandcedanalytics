@@ -1,0 +1,36 @@
+// ==============================================================================
+// Error Analysis - Detailed Error Breakdown
+// ==============================================================================
+// Description: Analyzes errors and exceptions from Copilot Studio bot
+// Time Range: Last 7 days
+// ==============================================================================
+
+let _startTime = ago(7d);
+let _endTime = now();
+
+exceptions
+| where timestamp between (_startTime .. _endTime)
+| where cloud_RoleName == "Microsoft Copilot Studio"
+| summarize
+    ErrorCount = count(),
+    AffectedSessions = dcount(session_Id),
+    FirstOccurrence = min(timestamp),
+    LastOccurrence = max(timestamp),
+    SampleMessages = make_set(outerMessage, 3)
+    by
+    ErrorType = type,
+    ProblemId = problemId,
+    CloudRole = cloud_RoleName
+| where ErrorCount > 1
+| extend DaysSinceFirst = datetime_diff('day', now(), FirstOccurrence)
+| project
+    ErrorType,
+    CloudRole,
+    ErrorCount,
+    AffectedSessions,
+    FirstOccurrence,
+    LastOccurrence,
+    DaysSinceFirst,
+    SampleMessages
+| order by ErrorCount desc
+| take 50

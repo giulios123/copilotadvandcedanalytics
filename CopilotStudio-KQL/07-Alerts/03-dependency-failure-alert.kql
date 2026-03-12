@@ -1,0 +1,41 @@
+// ==============================================================================
+// Dependency Failure Alert - External Service Failures
+// ==============================================================================
+// Description: Alert when dependency failure rate exceeds threshold
+// Time Range: Last 1 hour
+// Threshold: 20% failure rate or 10+ failures
+// Use Case: Configure as Azure Monitor Alert
+// ==============================================================================
+
+let _startTime = ago(1h);
+let _endTime = now();
+let _failureRateThreshold = 20.0;
+let _failureCountThreshold = 10;
+
+dependencies
+| where timestamp between (_startTime .. _endTime)
+| where cloud_RoleName == "Microsoft Copilot Studio"
+| summarize
+    TotalCalls = count(),
+    FailedCalls = countif(success == false)
+    by
+    DependencyName = name,
+    DependencyType = type
+| extend FailureRate = round((todouble(FailedCalls) / todouble(TotalCalls)) * 100, 2)
+| where FailureRate > _failureRateThreshold or FailedCalls >= _failureCountThreshold
+| extend
+    Severity = case(
+        FailureRate >= 50 or FailedCalls >= 50, "Critical",
+        FailureRate >= 35 or FailedCalls >= 25, "High",
+        "Medium"
+    )
+| project
+    AlertTime = now(),
+    DependencyName,
+    DependencyType,
+    TotalCalls,
+    FailedCalls,
+    FailureRate,
+    Severity,
+    Message = strcat("Dependency '", DependencyName, "' has ", FailureRate, "% failure rate (", FailedCalls, " failures)")
+| order by FailureRate desc

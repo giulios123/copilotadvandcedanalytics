@@ -1,0 +1,10 @@
+// Daily Active Users (Last 14 Days)
+// Shows unique users per day with time-series visualization
+
+customEvents
+| where timestamp between (ago(14d) .. now())
+| extend designMode = tostring(customDimensions.designMode)
+| where isempty(designMode) or tolower(designMode) != "true"
+| summarize UniqueUsers = dcount(user_Id) by bin(timestamp, 1d)
+| order by timestamp asc
+| render timechart

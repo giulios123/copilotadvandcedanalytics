@@ -1,0 +1,75 @@
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Windows
+*.lnk
+*.tmp
+*.temp
+~$*
+
+# IDE and Editor
+.vscode/
+.vs/
+.idea/
+*.swp
+*.swo
+*~
+.history/
+
+# Logs and temporary files
+*.log
+logs/
+temp/
+tmp/
+
+# Azure and Credentials
+*.publishsettings
+*.azurePubxml
+.env
+.env.local
+secrets.json
+appsettings.local.json
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build output (if any .NET samples are added)
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+
+# Package files
+*.nupkg
+*.snupkg
+node_modules/
+package-lock.json
+yarn.lock
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+
+# Cache
+.cache/
+*.cache
+
+# Personal notes (allow users to keep local notes)
+NOTES.md
+TODO.md
+.personal/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Application Insights connection strings (security)
+*connectionstring*
+*instrumentationkey*

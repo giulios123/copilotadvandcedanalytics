@@ -1,0 +1,35 @@
+// ==============================================================================
+// User Retention - New vs Returning Users Analysis
+// ==============================================================================
+// Description: Tracks user retention by analyzing interaction frequency
+// Time Range: Last 30 days
+// Fields Used: user_Id, customDimensions (designMode)
+// ==============================================================================
+
+let queryStartDate = ago(30d);
+let queryEndDate = now();
+
+customEvents
+| where timestamp between (queryStartDate .. queryEndDate)  // Inclusive, avoids missing boundary events
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| where isnotempty(user_Id)
+| summarize
+    DaysActive = dcount(bin(timestamp, 1d)),
+    FirstSeen = min(timestamp),
+    LastSeen = max(timestamp),
+    TotalInteractions = count()
+    by user_Id
+| extend DaysSinceFirstSeen = datetime_diff('day', now(), FirstSeen)
+| extend UserType = case(
+    DaysActive == 1, "New User (1 day active)",
+    DaysActive <= 3, "Occasional User (2-3 days active)",
+    DaysActive <= 10, "Regular User (4-10 days active)",
+    "Frequent User (10+ days active)"
+)
+| summarize UserCount = count() by UserType
+| order by UserCount desc
+| render piechart
+    with (
+        title="User Retention Distribution (Last 30 Days)"
+    )

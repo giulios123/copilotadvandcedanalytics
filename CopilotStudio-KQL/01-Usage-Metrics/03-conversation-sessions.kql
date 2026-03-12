@@ -1,0 +1,32 @@
+// ==============================================================================
+// Conversation Sessions - Session Analysis
+// ==============================================================================
+// Description: Analyzes conversation activity by event type and users
+// Time Range: Last 14 days
+// Fields Used: name, user_Id, customDimensions (designMode)
+// ==============================================================================
+
+let queryStartDate = ago(14d);
+let queryEndDate = now();
+
+customEvents
+| where timestamp between (queryStartDate .. queryEndDate)  // Inclusive, avoids missing boundary events
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| summarize
+    TotalEvents = count(),
+    BotMessages = countif(name == "BotMessageSend"),
+    TopicStarts = countif(name == "TopicStart"),
+    TopicEnds = countif(name == "TopicEnd"),
+    UniqueUsers = dcount(user_Id)
+    by bin(timestamp, 1d)
+| extend AvgEventsPerUser = round(todouble(TotalEvents) / todouble(UniqueUsers), 2)
+| project
+    Date = timestamp,
+    UniqueUsers,
+    TotalEvents,
+    BotMessages,
+    TopicStarts,
+    TopicEnds,
+    AvgEventsPerUser
+| order by Date desc

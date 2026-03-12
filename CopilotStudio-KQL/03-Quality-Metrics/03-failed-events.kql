@@ -1,0 +1,40 @@
+// ==============================================================================
+// Failed Events - Custom Event Failures
+// ==============================================================================
+// Description: Identifies failed or problematic custom events
+// Time Range: Last 7 days
+// Fields Used: name, user_Id, cloud_RoleInstance, customDimensions (designMode, message)
+// ==============================================================================
+
+let _startTime = ago(7d);
+let _endTime = now();
+
+customEvents
+| where timestamp between (_startTime .. _endTime)
+| extend
+    isDesignMode = tostring(customDimensions['designMode']),
+    messageText = tostring(customDimensions['message'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+// Look for potential error indicators
+| where
+    name contains "error" or
+    name contains "fail" or
+    name contains "exception" or
+    messageText contains "error" or
+    messageText contains "sorry"
+| summarize
+    FailureCount = count(),
+    AffectedUsers = dcount(user_Id),
+    FirstOccurrence = min(timestamp),
+    LastOccurrence = max(timestamp),
+    Agents = make_set(cloud_RoleInstance)
+    by EventName = name
+| project
+    EventName,
+    FailureCount,
+    AffectedUsers,
+    Agents,
+    FirstOccurrence,
+    LastOccurrence
+| order by FailureCount desc
+| take 25

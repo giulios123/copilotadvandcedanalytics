@@ -1,0 +1,27 @@
+// ==============================================================================
+// Agent Distribution - Usage by Agent Instance
+// ==============================================================================
+// Description: Shows activity distribution across different bot agent instances
+// Time Range: Last 14 days
+// Fields Used: cloud_RoleInstance (agent name), user_Id, customDimensions (designMode)
+// ==============================================================================
+
+let queryStartDate = ago(14d);
+let queryEndDate = now();
+
+customEvents
+| where timestamp between (queryStartDate .. queryEndDate)  // Inclusive, avoids missing boundary events
+| where name == "BotMessageSend"
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| where isnotempty(cloud_RoleInstance)
+| summarize
+    MessageCount = count(),
+    UniqueUsers = dcount(user_Id)
+    by cloud_RoleInstance
+| project AgentName = cloud_RoleInstance, MessageCount, UniqueUsers
+| order by MessageCount desc
+| render piechart
+    with (
+        title="Message Distribution by Agent Instance"
+    )

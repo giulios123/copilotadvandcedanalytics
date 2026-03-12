@@ -1,0 +1,35 @@
+// ==============================================================================
+// Conversation Analysis - Event Type Breakdown
+// ==============================================================================
+// Description: Analyzes conversation patterns by event type
+// Time Range: Last 7 days
+// Fields Used: name (BotMessageSend/TopicStart/TopicEnd), user_Id, customDimensions (designMode, message)
+// ==============================================================================
+
+let _startTime = ago(7d);
+let _endTime = now();
+
+customEvents
+| where timestamp between (_startTime .. _endTime)
+| extend
+    isDesignMode = tostring(customDimensions['designMode']),
+    messageText = tostring(customDimensions['message'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| summarize
+    TotalEvents = count(),
+    BotMessages = countif(name == "BotMessageSend"),
+    TopicStarts = countif(name == "TopicStart"),
+    TopicEnds = countif(name == "TopicEnd"),
+    UniqueUsers = dcount(user_Id),
+    AvgMessageLength = avgif(strlen(messageText), name == "BotMessageSend" and isnotempty(messageText))
+    by bin(timestamp, 1d)
+| extend AvgMessageLength = round(AvgMessageLength, 2)
+| project
+    Date = timestamp,
+    UniqueUsers,
+    BotMessages,
+    TopicStarts,
+    TopicEnds,
+    TotalEvents,
+    AvgMessageLength
+| order by Date desc

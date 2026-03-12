@@ -1,0 +1,14 @@
+// Agent Activity Summary (Last 7 Days)
+// Compare activity across different bot instances
+
+customEvents
+| where timestamp between (ago(7d) .. now())
+| extend designMode = tostring(customDimensions.designMode)
+| where isempty(designMode) or tolower(designMode) != "true"
+| summarize
+    TotalEvents = count(),
+    UniqueUsers = dcount(user_Id),
+    FirstEvent = min(timestamp),
+    LastEvent = max(timestamp)
+    by cloud_RoleInstance
+| order by TotalEvents desc

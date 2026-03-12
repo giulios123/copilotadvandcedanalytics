@@ -1,0 +1,18 @@
+// New vs Returning Users (Last 30 Days)
+// Segment users by first-time vs returning activity
+
+let lookbackPeriod = 30d;
+let recentPeriod = 7d;
+let historicalUsers = customEvents
+    | where timestamp between (ago(lookbackPeriod) .. ago(recentPeriod))
+    | extend designMode = tostring(customDimensions.designMode)
+    | where isempty(designMode) or tolower(designMode) != "true"
+    | distinct user_Id;
+customEvents
+| where timestamp between (ago(recentPeriod) .. now())
+| extend designMode = tostring(customDimensions.designMode)
+| where isempty(designMode) or tolower(designMode) != "true"
+| summarize FirstEvent = min(timestamp) by user_Id
+| extend UserType = iff(user_Id in (historicalUsers), "Returning", "New")
+| summarize UserCount = count() by UserType
+| render piechart

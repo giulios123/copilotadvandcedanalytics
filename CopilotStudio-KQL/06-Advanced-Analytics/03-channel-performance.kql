@@ -1,0 +1,39 @@
+// ==============================================================================
+// Agent Performance - Comparative Agent Instance Analysis
+// ==============================================================================
+// Description: Compares performance and usage across different agent instances
+// Time Range: Last 14 days
+// Fields Used: cloud_RoleInstance, name, user_Id, customDimensions (designMode)
+// ==============================================================================
+
+let _startTime = ago(14d);
+let _endTime = now();
+
+customEvents
+| where timestamp between (_startTime .. _endTime)
+| extend isDesignMode = tostring(customDimensions['designMode'])
+| where isempty(isDesignMode) or tolower(isDesignMode) != "true"  // Exclude test canvas; keep events where designMode is absent
+| where isnotempty(cloud_RoleInstance)
+| summarize
+    TotalEvents = count(),
+    BotMessages = countif(name == "BotMessageSend"),
+    TopicStarts = countif(name == "TopicStart"),
+    TopicEnds = countif(name == "TopicEnd"),
+    UniqueUsers = dcount(user_Id)
+    by cloud_RoleInstance
+| extend
+    AvgEventsPerUser = round(todouble(TotalEvents) / todouble(UniqueUsers), 2),
+    TopicCompletionRate = case(
+        TopicStarts > 0, round((todouble(TopicEnds) / todouble(TopicStarts)) * 100, 2),
+        0.0
+    )
+| project
+    AgentName = cloud_RoleInstance,
+    TotalEvents,
+    BotMessages,
+    TopicStarts,
+    TopicEnds,
+    UniqueUsers,
+    AvgEventsPerUser,
+    TopicCompletionRate
+| order by TotalEvents desc
