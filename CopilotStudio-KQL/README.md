@@ -139,6 +139,30 @@ customEvents
    ```
 5. Save and view your dashboard
 
+### Upload KQL Files as Azure Monitor Saved Queries
+
+A helper script is available at [upload_saved_queries.py](upload_saved_queries.py). It scans the `.kql` files in this folder, creates or reuses an Azure Monitor Log Analytics query pack, and uploads each query to the selected Azure subscription and resource group.
+
+Example usage:
+
+```bash
+python3 CopilotStudio-KQL/upload_saved_queries.py \
+  --subscription-id <subscription-id> \
+  --resource-group <resource-group> \
+  --query-pack-name CopilotStudioKQL-Queries
+```
+
+You can also use environment variables instead of passing the arguments explicitly:
+
+```bash
+export SUBSCRIPTION_ID=<subscription-id>
+export RESOURCE_GROUP=<resource-group>
+export QUERY_PACK_NAME=CopilotStudioKQL-Queries
+python3 CopilotStudio-KQL/upload_saved_queries.py
+```
+
+The script requires the Azure CLI to be installed and authenticated with permissions to create or update query packs in the target subscription.
+
 ## 📊 Dashboard Descriptions
 
 ### 1. Overview Dashboard

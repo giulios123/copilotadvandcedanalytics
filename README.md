@@ -81,6 +81,16 @@ copilotadvandcedanalytics/
    - Import JSON dashboard definitions to Azure Data Explorer
    - Connect to your Application Insights workspace
 
+5. **Upload KQL files as saved queries**
+   - A helper script is available at [CopilotStudio-KQL/upload_saved_queries.py](CopilotStudio-KQL/upload_saved_queries.py)
+   - It scans the `.kql` files in the repository, creates or reuses an Azure Monitor query pack, and uploads them to your target subscription/resource group
+   - Example:
+     ```bash
+     python3 CopilotStudio-KQL/upload_saved_queries.py \
+       --subscription-id <subscription-id> \
+       --resource-group <resource-group>
+     ```
+
 ### Example Query
 
 ```kql
